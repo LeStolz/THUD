@@ -38,10 +38,10 @@ import bs4
 import requests
 
 
-def read_html_table(file, url, columns):
+def read_html_table(file, url: str, columns: list) -> pd.DataFrame:
 	deformat = lambda string: ' '.join(string.split())
 
-	doc = bs4.BeautifulSoup(file, 'html.parser')
+	doc: bs4.BeautifulSoup = bs4.BeautifulSoup(file, 'html.parser')
 
 	rows = doc.tbody.find_all('tr')
 
@@ -55,47 +55,47 @@ def read_html_table(file, url, columns):
 	)
 
 
-count = 0
-def read_html_prices(file):
+count: int = 0
+def read_html_prices(file) -> list:
 	global count
 	print(count)
 	count += 1
 
-	doc = bs4.BeautifulSoup(file, 'html.parser')
+	doc: bs4.BeautifulSoup = bs4.BeautifulSoup(file, 'html.parser')
 	prices = doc.find(string=re.compile('var dataArray'))
 	price = doc.find(string=re.compile('Last Price Change'))
 
-	prices = re.findall(r"{x: (\d+), y: (\d+.?\d+)}+", prices.parent.text) if prices else []
+	prices: list = re.findall(r"{x: (\d+), y: (\d+.?\d+)}+", prices.parent.text) if prices else []
 
-	price = [price.parent.parent.text] if price else []
+	price: list = [price.parent.parent.text] if price else []
 
 	return prices + price
 
 
-def crawl_data(html, html_url, columns, csv):
+def crawl_data(html: str, html_url: str, columns: list, csv: str) -> None:
 	with requests.Session() as session:
 		with open(html, 'r', encoding='utf-8', newline='') as file:
-			table = read_html_table(file, html_url, columns)
+			table: pd.DataFrame = read_html_table(file, html_url, columns)
 
-	table['Prices'] = [
-		read_html_prices(session.get(row['URL']).text)
-		for index, row in table.iterrows()
-	]
+		table['Prices'] = [
+			read_html_prices(session.get(row['URL']).text)
+			for index, row in table.iterrows()
+		]
 
-	table['Price'] = [
-		row['Prices'].pop() if row['Prices'] else None
-		for index, row in table.iterrows()
-	]
+		table['Price'] = [
+			row['Prices'].pop() if row['Prices'] else None
+			for index, row in table.iterrows()
+		]
 
-	table['Release Date'] = [
-		row['Prices'][0][0] if row['Prices'] else None
-		for index, row in table.iterrows()
-	]
+		table['Release Date'] = [
+			row['Prices'][0][0] if row['Prices'] else None
+			for index, row in table.iterrows()
+		]
 
-	table.to_csv(csv, encoding='utf-8', index=False)
+		table.to_csv(csv, encoding='utf-8', index=False)
 
 
-def main():
+def main() -> None:
 	crawl_data(
 		'step1_data_crawling\data_html\cpu.html',
 		'https://www.cpubenchmark.net/',

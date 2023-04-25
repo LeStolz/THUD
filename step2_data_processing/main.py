@@ -1,99 +1,125 @@
 """
-1.remove testDate, url, socket
-2.Nếu ko có release date và không có price thì xóa
-3.Lấy từ 2017-2023
-4.Chuyển kiểu dữ liệu hợp lí(release date, ) + lastPrice chuyển ngày tháng về double
-5.merge price vào Prices *xóa trùng  rồi sort theo ngày tháng rồi xóa price
+data processing:
+	1. drop irrelevant or derived columns (Unnamed, Value, Thread Value, Power Perf., Test Date, Socket, URL)
+	2. process data types of columns:
+		2.1. remove rows with no Price
+		2.2. merge Price with Prices and drop Price
+		2.3. convert marks to float
+	3. process null rows:
+		3.1. fill TDP and Thread Mark with mean value
+	4. remove irrelevant rows:
+		4.1. remove rows before 2017
+	5. recalculate derived columns:
+		CPU:
+			Value = Mark / Price
+			Single Thread Value = Single Thread Mark / Price
+			Power Performance = Mark / TDP
 
-*Chú ý: chỗ ko có ghi Na có chỗ thì để trống
-cleaning data: 
-    *Hàm chuyển sang mili(s) của python + 13 = thời gian được đổi trong data (trong data giờ định dạng là 06:00:00)
-    Loại bỏ các thuộc tính không cần thiết như "Test Date", "Socket", "URL", "Value", "Thread Value". Ngoài ra, loại bỏ thêm các dòng
-có cả 'Release Date', 'Price' đều rỗng.
-    Tiếp đến, tiến hành loại bỏ các dòng sản phẩm nằm ngoài khoảng thời gian 2017-2023 nhưng vì release date được thể hiện dưới 
-đơn vị Miliseconds nên cần tiến hành chuyển chúng về kiểu datetime để cùng kiểu dữ liệu dễ dàng cho việc so sánh và loại bỏ.
-    Ngoài ra, tiến hành chuyển đổi các thuộc tính về kiểu dữ liệu phù hợp.
+		GPU:
+			Value = G3D Mark / Price
+			Power Performance = G3D Mark / TDP
 """
 
 
+import ast
+import math
 import pandas as pd
 import regex as re
-import datetime as dt
-from datetime import datetime, timedelta
-import numpy as np
-import math
+from time import strftime, localtime
 
-file_name_1 = 'C:/Users/Dell/Desktop/Python/clean/THUD/step1_data_crawling/data_csv/cpu.csv'
-file_name_2 = 'C:/Users/Dell/Desktop/Python/clean/THUD/step1_data_crawling/data_csv/gpu.csv'
 
-def cleanning_at_Price_col(df):
-    Price = df['Price'].str.findall(r"\$(\d+\,?\d*\.?\d+)[\s\w]+\((\d+-\d+-\d+)\)")
-    
-    Price = Price.tolist()
-    
-    Result = []
-    
-    for i in  range (0, len(Price)):
-        
-        #convert tuple to list
-        Price[i][0] = list(Price[i][0])
-        #replace ',' -> '.'
-        Price[i][0][0] = Price[i][0][0].replace(',', '')
-        #convert string to float in each list
-        Price[i][0][0] = float(Price[i][0][0])  
-        
-        Result.append(Price[i][0])
-    
-    df.drop(columns=["Price"], inplace = True)
-    
-    df['Price'] = Result
-    
-    return df
+def drop_irrelevant_columns(data: pd.DataFrame) -> None:
+	data.drop(
+		columns=['Unnamed: 0', 'Value', 'Thread Value', 'Power Perf.', 'Test Date', 'Socket', 'URL'],
+		inplace=True, errors='ignore'
+	)
 
-def cpu_file_handling():
-    cpu = pd.read_csv(file_name_1, index_col=[0])
-    
-    #step 1
-    cpu.drop(columns=["Test Date", "Socket", "URL", "Value", "Thread Value"], inplace=True)
-    
-    #step 2
-    cpu.dropna(subset=['Release Date', 'Price'], how = 'all', inplace=True)
-    
-    #step 3
-    release_date = []
 
-    #int -> datetime
-    for value in cpu['Release Date']:
-        if math.isnan(value):
-           release_date.append(None)
-        else: 
-            release_date.append(datetime.fromtimestamp(value / 1000).date())
-        
-    cpu.drop(columns=["Release Date"], inplace=True)
-    cpu['Release Date'] = release_date
-    cpu['Release Date'] = pd.to_datetime(cpu['Release Date'])
-    
-    cpu = cpu.loc[(cpu['Release Date'] >= '2017-01-01') & (cpu['Release Date'] < '2023-12-31')]
-    
-    #step 4
-    cpu = cleanning_at_Price_col(cpu)
-    
-    #change type of Mark
-    Mark = cpu['Mark'].str.replace(r',', '.', regex = True)
-    cpu.drop(columns=["Mark"], inplace=True)
-    cpu['Mark'] = Mark
-    cpu['Mark'] = cpu['Mark'].astype(float)
-    
-    #change type of ThreadMark
-    Thread_Mark = cpu['Thread Mark'].str.replace(r',', '.', regex = True)
-    cpu.drop(columns=["Thread Mark"], inplace=True)
-    cpu['Thread Mark'] = Thread_Mark
-    cpu['Thread Mark'] = cpu['Thread Mark'].astype(float)
-    
-    
-def main():
-    cpu_file_handling()
+def process_data_types(data: pd.DataFrame) -> None:
+	to_datetime = lambda epoch: pd.to_datetime(strftime('%Y-%m-%d', localtime(epoch / 1000)), format='%Y-%m-%d')
 
+	data.dropna(subset=['Price'], inplace=True)
+
+	latest_prices: list = data['Price'].str.findall(r"\$(\d+\,?\d*\.?\d+)[\s\w]+\((\d+-\d+-\d+)\)").to_list()
+	pricess: list = data['Prices'].apply(ast.literal_eval).to_list()
+
+	data['Prices'] = [
+		prices + ([(price[0][1], price[0][0])] if isinstance(price, list) and len(price[0]) == 2 else [])
+		for (prices, price) in zip(pricess, latest_prices)
+	]
+
+	data['Prices'] = data['Prices'].apply(lambda prices: sorted(list(set([
+		(
+			to_datetime(int(price[0])) if price[0].isdigit() else pd.to_datetime(price[0], format='%Y-%m-%d'),
+			float(price[1].replace(',', ''))
+		)
+		for price in prices
+	]))))
+
+	data.drop(columns=['Price'], inplace=True, errors='ignore')
+
+	for column in data:
+		if 'Mark' in column:
+			data[column] = data[column].apply(lambda mark: float(str(mark).replace(',', '')))
+
+	data['Release Date'] = data['Release Date'].apply(
+		lambda epoch: to_datetime(int(epoch)) if not math.isnan(epoch) else None
+	)
+
+
+def process_null_rows(data: pd.DataFrame) -> None:
+	data['TDP (W)'].fillna(data['TDP (W)'].mean(), inplace=True)
+
+	if 'Thread Mark' in data:
+		data['Thread Mark'].fillna(data['Thread Mark'].mean(), inplace=True)
+
+
+def remove_irrelevant_rows(data: pd.DataFrame) -> None:
+	data.drop(data[data['Release Date'] < pd.to_datetime('2017-01-01')].index, inplace=True)
+
+
+def recalculate_derived_columns(data: pd.DataFrame) -> None:
+		mark: str = 'Mark' if 'Mark' in data else 'G3D Mark'
+
+		data['Power Perf.'] = data[mark] / data['TDP (W)']
+		data['Value'] = [row[mark] / row['Prices'][0][1] for index, row in data.iterrows()]
+
+		if 'Thread Mark' in data:
+			data['Thread Value'] = [row['Thread Mark'] / row['Prices'][0][1] for index, row in data.iterrows()]
+
+
+def process_data(data_file: str, cleaned_data_file: str) -> None:
+	data: pd.DataFrame = pd.read_csv(data_file)
+
+	print('drop_irrelevant_columns')
+	drop_irrelevant_columns(data)
+
+	print('process_data_types')
+	process_data_types(data)
+
+	print('process_null_rows')
+	process_null_rows(data)
+
+	print('remove_irrelevant_rows')
+	remove_irrelevant_rows(data)
+
+	print('recalculate_derived_columns')
+	recalculate_derived_columns(data)
+
+	print(data.info())
+
+	data.to_csv(cleaned_data_file, encoding='utf-8', index=False)
+
+
+def main() -> None:
+	process_data(
+		'step1_data_crawling\data_csv\cpu.csv',
+		'step2_data_processing\data\cpu.csv'
+	)
+	process_data(
+		'step1_data_crawling\data_csv\gpu.csv',
+		'step2_data_processing\data\gpu.csv'
+	)
 
 
 if __name__ == '__main__':
