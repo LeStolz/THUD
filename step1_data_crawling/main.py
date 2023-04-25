@@ -79,17 +79,17 @@ def crawl_data(html: str, html_url: str, columns: list, csv: str) -> None:
 
 		table['Prices'] = [
 			read_html_prices(session.get(row['URL']).text)
-			for index, row in table.iterrows()
+			for _, row in table.iterrows()
 		]
 
 		table['Price'] = [
 			row['Prices'].pop() if row['Prices'] else None
-			for index, row in table.iterrows()
+			for _, row in table.iterrows()
 		]
 
 		table['Release Date'] = [
 			row['Prices'][0][0] if row['Prices'] else None
-			for index, row in table.iterrows()
+			for _, row in table.iterrows()
 		]
 
 		table.to_csv(csv, encoding='utf-8', index=False)

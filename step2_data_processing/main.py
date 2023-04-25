@@ -66,6 +66,11 @@ def process_data_types(data: pd.DataFrame) -> None:
 		lambda epoch: to_datetime(int(epoch)) if not math.isnan(epoch) else None
 	)
 
+	data['Release Price'] = [
+		row['Prices'][0][1] if row['Prices'] and row['Prices'][0][0] == row['Release Date'] else None
+		for _, row in data.iterrows()
+	]
+
 
 def process_null_rows(data: pd.DataFrame) -> None:
 	data['TDP (W)'].fillna(data['TDP (W)'].mean(), inplace=True)
@@ -82,10 +87,10 @@ def recalculate_derived_columns(data: pd.DataFrame) -> None:
 		mark: str = 'Mark' if 'Mark' in data else 'G3D Mark'
 
 		data['Power Perf.'] = data[mark] / data['TDP (W)']
-		data['Value'] = [row[mark] / row['Prices'][0][1] for index, row in data.iterrows()]
+		data['Value'] = [row[mark] / row['Prices'][0][1] for _, row in data.iterrows()]
 
 		if 'Thread Mark' in data:
-			data['Thread Value'] = [row['Thread Mark'] / row['Prices'][0][1] for index, row in data.iterrows()]
+			data['Thread Value'] = [row['Thread Mark'] / row['Prices'][0][1] for _, row in data.iterrows()]
 
 
 def process_data(data_file: str, cleaned_data_file: str) -> None:
