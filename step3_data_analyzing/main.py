@@ -4,20 +4,7 @@ analyzing data:
 	2. profile data
 	3. plot scatters
 	4. plot avgs
-	5. regression R2:
-
-		Mark: 7 -> 0.7155108856031989 0.5239663640962842
-
-		TDP: 7 -> 0.3037620265020166 0.37625832565102796
-		Power Perf: 7 -> 0.6379758024021164 0.5385432052399362
-
-		Release Price: 7 -> 0.370596532908827 0.2443042985281275
-		Value: 7 -> 0.7607845115176962 0.4779420614863987
-
-limitations:
-
-	- Not enough data to analyze Moore's law
-	- Not accurate inflation calculation
+	5. regression R2
 """
 
 
@@ -83,6 +70,9 @@ def plot_scatters(data: pd.DataFrame, count: int, color: str) -> None:
 		if is_numeric_dtype(data[column]) and not 'Thread' in column and not 'G2D' in column:
 			ax = plt.subplot(5, 2, count)
 			ax.set_ylabel(column)
+			if count >= 9:
+				ax.set_xlabel('Release Date')
+
 			ax.tick_params(axis='both', which='both', left=False, right=False, labelleft=False)
 			plt.scatter(data['Release Date'], data[column], color=color)
 			count += 2
@@ -163,9 +153,9 @@ def analyze_datas(cpu_data_file: str, gpu_data_file: str) -> None:
 	cpu_data: pd.DataFrame = preprocess(cpu_data_file)
 	gpu_data: pd.DataFrame = preprocess(gpu_data_file)
 
-	# plot_scatters(cpu_data, 1, 'tab:blue')
-	# plot_scatters(gpu_data, 2, 'tab:orange')
-	# plt.show()
+	plot_scatters(cpu_data, 1, 'tab:blue')
+	plot_scatters(gpu_data, 2, 'tab:orange')
+	plt.show()
 
 	# cpu_avg_pricing_data: pd.DataFrame = get_avg_data(get_pricing_data(cpu_data), 'Date', 'Price')
 	# gpu_avg_pricing_data: pd.DataFrame = get_avg_data(get_pricing_data(gpu_data), 'Date', 'Price')

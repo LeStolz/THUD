@@ -8,8 +8,8 @@
 \usepackage[normalem]{ulem}
 \usepackage[english]{babel}
 \def\BibTeX{{
-	\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-	T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX
+    \rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX
 }}
 \renewcommand{\arraystretch}{1.3}
 
@@ -56,7 +56,18 @@
 \maketitle
 
 \begin{abstract}
-	% Todo Write and Revise
+	The recent chip shortage has caused tremendous disruption in various
+	industries, notably the chip development industry itself. Naturally,
+	two questions arise: First, when will the shortage subside and end? Second,
+	how will the chip industry change from the shortage? This research
+	seeks to answer these questions by modeling the relationship between a
+	processor's metrics and its release date using a simple polynomial
+	regression model. This is coupled with the least-squares method to fit
+	said model to the acquired data points. Results show that the chip
+	shortage had already ended in Q3 2022, and the shortage did not seem to
+	have much of an effect on the processor development industry. However,
+	the shortage might reemerge should there be another global crisis similar
+	to those in recent years.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -65,7 +76,7 @@
 \end{IEEEkeywords}
 
 \section{Introduction}
-Imagine it's the simpler times of around the start of 2019. You, a
+Imagine it's the simpler times around the start of 2019. You, a
 hard-working corporate employee, haven't a care in the world about your
 dusty old desktop as your company already provides you with high-end ones
 at work. As 2020 hits, so does the COVID-19 pandemic, and now you must
@@ -96,10 +107,10 @@ factors caused prices to shoot up to unprecedented figures which led to
 the great processor shortage in the second half of 2020.
 
 The processor shortage has caused great disruptions in various
-industries, largely those who utilize processors in their production
+industries, largely those that utilize processors in their production
 procedures. However, though mostly detrimental, the shortage gave rise to
 many significant innovations in processor architectures in order to
-reduce the manufacturing cost, thus lowering the barrier of entry to
+reduce manufacturing costs, thus lowering the barrier of entry to
 processors. Naturally, two questions arise: First, when will the
 shortage, along with all its demerits, subside and end? And second, how
 will the processor industry change from the shortage? But the insight
@@ -126,14 +137,14 @@ ever-changing demands. All in all, the research will help get the state
 of the economy back on track and ensure its stability for the near future.
 
 The research will leverage datasets on common metrics of processors to
-analyze the evolution of both the processor shortage and the processors
-themselves during the pandemic using statistics. Armed with that knowledge,
+analyze the evolution of the processor shortage. Armed with that knowledge,
 the paper will attempt to project when the shortage ends and what is the
 next big trend for the processor industry. To achieve this, we will employ
-the help of a polynomial regression model -- A reliable tool for short-term
-predictions. By feeding it historical data, it can learn the hidden
-patterns and be able to predict the future of the development of
-processing units.
+the help of a polynomial regression model coupled with the least-squares method
+-- A reliable tool for short-term predictions. By feeding the model historical
+data on processors' metrics, it can learn the hidden patterns and be able to
+predict when the shortage will end along with the future of the development
+of processing units.
 
 It can be said that there are many factors which contribute to the
 processor shortage. However, the research will only
@@ -145,8 +156,8 @@ performance, efficiency, and value in CPUs and GPUs from the first quarter of
 \begin{itemize}
 	\item performance refers to speed,
 	\item efficiency refers to power consumption, and
-	\item value refers to amount of performance per dollar, i.e.,
-	      how much bang are you getting for your bucks.
+	\item value refers to the amount of performance per dollar, i.e.,
+	      how much bang you are getting for your bucks.
 \end{itemize}
 
 Overall, the objectives of this paper are two folds:
@@ -156,23 +167,22 @@ Overall, the objectives of this paper are two folds:
 	\item To project an emerging trend in the development of CPUs and GPUs in
 	      terms of performance, efficiency, and value.
 \end{enumerate}
-% Todo Revise
 
 \section{Related Works}\label{RelatedWorks}
-In recent years, the number of research raising concerns on the chip
+In recent years, the number of research raising concerns about the chip
 shortage implies a shared interest in analyzing it.
 
 Most of these studies are aimed at revealing a vulnerability in the
 global \textbf{chip supply chain} and how to remedy it: \cite{Hannah:2021},
 \cite{Xiling:2021}, and \cite{Wassen:2022} try to identify the cause
-of the shortage by investigating said vulnerability and to suggest
+of the shortage by investigating the said vulnerability and suggest
 remedies to the problem; \cite{Yeh:2022} attempts to lessen the impact of
 the shortage by suggesting the recycling chip testing method in order to
 increase the production yield.
 
-Others sees the crisis as an opportunity to learn about \textbf{supply chain}
+Others see the crisis as an opportunity to learn about \textbf{supply chain}
 management: \cite{Jennifer:2022} attempts to provide a new framework for
-strategically managing global supply chains based on lessons learnt from the
+strategically managing global supply chains based on lessons learned from the
 shortage; \cite{Vinay:2022} explores how an industry-wise systemic
 disruption starts and propagates using the shortage as an example;
 Lastly, \cite{Duncan:2022} and \cite{Kristin:2022} tell an engaging story
@@ -194,11 +204,10 @@ studied.
 But fortunately, data analysis using regression has been done before.
 To achieve our goal of forecasting the development of
 processors, we leverage the use of a polynomial regression model. The model
-is well known for its accuracy in predicting short-term growth of a
+is well known for its accuracy in predicting the short-term growth of a
 population and has already been applied to solve various problems such as
 predicting rainfall \cite{Jany:2016} or the infamous COVID-19 pandemic's
 death toll \cite{Debanjan:2020}.
-% Todo Revise
 
 \section{Methodology}
 \subsection{Data selection}
@@ -210,10 +219,10 @@ predicting when it will end is equivalent to dissecting and projecting the
 average \textbf{price of processors over time}. Moreover, the research also
 aims to forecast an emerging trend in the development of processors in terms of
 \textbf{performance, efficiency, and value}. Therefore, to
-conduct this research, we must first acquire data on performance,
+conduct this research, we must first acquire data on the performance,
 efficiency, release date, release price, and price over time of processors.
 
-While datasets on the former 3 attributes are apparently abundant, those
+While datasets on the former 3 attributes are abundant, those
 on processors' prices are surprisingly scarce. In the end, we decided to
 consult PassMark for their CPU dataset \cite{PassMarkCPU:2023} and GPU dataset
 \cite{PassMarkGPU:2023}. Conveniently, their datasets already contain metrics
@@ -229,24 +238,24 @@ of processors for easy data inspection.
 
 \subsection{Data overview}
 To summarize, we divide our data into 2 datasets:
-\subsubsection{The CPU dataset comprises, for each CPU, of}
+\subsubsection{The CPU dataset, of 1110 entries, comprises of}
 \begin{itemize}
 	\item Trivia data:
 	      \begin{itemize}
 		      \item Name
 		      \item Category
 	      \end{itemize}
-	\item Performance data:
+	\item Performance measuring data:
 	      \begin{itemize}
 		      \item Mark\footnote{Formulas for marks can be found at https://forums.passmark.com/\\performancetest/4599-formula-cpu-mark-memory-mark-and-disk-mark.}
 		            (Performance rating)
 	      \end{itemize}
-	\item Efficiency data:
+	\item Efficiency measuring data:
 	      \begin{itemize}
 		      \item TDP (W) (The highest heat a processor can handle)
 		      \item Power performance (Performance per TDP watt)
 	      \end{itemize}
-	\item Value data:
+	\item Value measuring data:
 	      \begin{itemize}
 		      \item Release date
 		      \item Release price
@@ -254,23 +263,23 @@ To summarize, we divide our data into 2 datasets:
 	      \end{itemize}
 	\item Pricing history (List of price points in the pricing history)
 \end{itemize}
-\subsubsection{The GPU dataset comprises, for each GPU, of}
+\subsubsection{The GPU dataset, of 237 entries, comprises of}
 \begin{itemize}
 	\item Trivia data:
 	      \begin{itemize}
 		      \item Name
 		      \item Category
 	      \end{itemize}
-	\item Performance data:
+	\item Performance measuring data:
 	      \begin{itemize}
 		      \item G3D mark (3D graphics performance rating)
 	      \end{itemize}
-	\item Efficiency data:
+	\item Efficiency measuring data:
 	      \begin{itemize}
 		      \item TDP (W)
 		      \item Power performance (3D Performance per TDP watt)
 	      \end{itemize}
-	\item Value data:
+	\item Value measuring data:
 	      \begin{itemize}
 		      \item Release date
 		      \item Release price
@@ -282,17 +291,17 @@ To summarize, we divide our data into 2 datasets:
 \subsection{Data acquisition}
 Acquiring data on performance and efficiency is as simple as copying the
 table HTML from the page itself and parsing it to a CSV file.
-To obtain the data on release date, release price, and price over time,
+To obtain the data on the release date, release price, and price over time,
 we crawled the link to each of the processor's page extracted from the
 aforementioned table HTML.
 
 Both tasks were accomplished using Python's Requests and BeautifulSoup4 module.
 
 \subsection{Data cleaning}
-The data cleaning process is as follows:
+The data-cleaning process is as follows:
 \begin{enumerate}
 	\item Drop irrelevant or derived columns
-	\item Drop rows without release date
+	\item Drop rows without release dates
 	\item Process datatypes of each column
 	\item Process pricing history:
 	      \begin{enumerate}
@@ -310,7 +319,7 @@ The data cleaning process is as follows:
 The process was performed using Python's Pandas module.
 
 \subsection{Data analyzing}
-As data analyzing is ultimately the step that will lead us to our answer, it is
+As data analysis is ultimately the step that will lead us to our answer, it is
 important to revise the questions the research seeks to answer:
 
 \subsubsection{When will the shortage end based on its historical data?}
@@ -318,15 +327,15 @@ important to revise the questions the research seeks to answer:
 As shortage is closely related to price, predicting when the shortage will end
 is equivalent to pinpointing when the average processor price is stabilized.
 Moreover, as the question is purely one of economics, we will only rely on the
-pricing history data to make said prediction.
+pricing history data to make the said prediction.
 
-To achieve this, we will first look at the past trends in average price of
+To achieve this, we will first look at the past trends in the average price of
 every quarter from 2017 onwards. And with each rise and fall during the
 shortage, we will attempt to associate it with an event that occurred at that
-time. This will lend us some insights on how future events can pan out.
-Furthermore, as the shortage began at around the second half of 2020, price
+time. This will lend us some insights into how future events can pan out.
+Furthermore, as the shortage began around the second half of 2020, the price
 data from prior to that period can be considered stable or normal. By
-comparing today’s average price with pre-shortage price (after adjusting for
+comparing today's average price with the pre-shortage price (after adjusting for
 inflation of course!), we can make an educated guess on when the shortage
 will end.
 
@@ -337,8 +346,8 @@ expected value of a dependent variable $y$ in terms of the value of an
 independent variable $x$ as an $n$th degree polynomial of the form:
 \[y = \alpha_{0} + \alpha_{1}x + \alpha_{2}x^{2} + ... + \alpha_{n}x^{n}\]
 
-In other words, it ``fits'' a polynomial graph between datapoints such that the
-sum of the residuals (the differences between these datapoints and the
+In other words, it ``fits'' a polynomial graph between data points such that the
+sum of the residuals (the differences between these data points and the
 polynomial) is minimum. To attain this minimum, the parameters of the
 polynomial in question are adjusted using the least-squares method. Instead of
 minimizing the sum of the residuals, the method seeks to minimize the
@@ -363,7 +372,7 @@ development of processors. Sounds familiar, doesn't it? Indeed, we could just
 perform a simple polynomial regression analysis on the dataset where the
 independent variable is the release date, and the dependent variables are the
 metrics related to performance, efficiency, and value. However, if the
-relationship is linear, the polynomial regression method is prone to overfit.
+relationship is linear, the polynomial regression method is prone to overfitting.
 Overfitting is when a regression model fits too closely to a given dataset that
 it loses its generality, rendering the model unsuitable for prediction. To
 combat overfitting, we must first determine whether release date has a strong
@@ -473,21 +482,16 @@ exponential model by replacing every dependent variable $y$ with $\log{y}$
 \end{table}
 
 By table \ref{tab2}, it doesn't seem that any of the correlations are
-exponential as the highest CPP value is a measly $0.488$.
+exponential as the highest PCC value is a measly $0.488$.
 
 Another way to check for the type of model we are dealing with is by simply
 looking at each metrics' scatter plots:
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=\columnwidth]{cpu_scatter.png}}
-	\caption{CPU Metrics versus release date}
+	\centerline{\includegraphics[width=\columnwidth]{scatter.png}}
+	\caption{CPU (left) and GPU (right) metrics versus release date}
 	\label{fig1}
 \end{figure}
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=\columnwidth]{gpu_scatter.png}}
-	\caption{GPU Metrics versus release date}
-	\label{fig2}
-\end{figure}
-Figure \ref{fig1} and \ref{fig2} show us that the patterns, or lack thereof,
+Figure \ref{fig1} shows us that the patterns, or lack thereof,
 are seemingly random. The only exception to this is the
 power performance plot in figure \ref{fig1} which is somewhat linear. This
 is also prevalent in table \ref{tab1} where we already explained that its
@@ -495,12 +499,17 @@ PCC value is still not strong enough to be considered linear.
 
 Thus, we must apply a polynomial regression model to solve this problem. On
 top of that, as the patterns are quite chaotic, we will apply regression on
-the average price of every quarter rather than individual datapoints. This
+the average price of every quarter rather than individual data points. This
 will help us ensure an accurate regression model at the cost of losing
 information on individual processors. However, the advantages far outweigh
 the disadvantages as we do not care about \textbf{every} processor, merely the
-trend in \textbf{all} processors, within the scope of this research.
-% Todo Revise
+trend in \textbf{all} processors, within the scope of this research. Moreover,
+in the case that polynomial regression fails to predict the dependent variable
+due to the pattern being too chaotic, we will resort to linear regression
+instead. Linear regression is a special case of polynomial regression where
+the polynomial’s degree is 1.  Although not as robust as polynomial regression,
+linear regression can help us identify the overall trend of the data more
+easily by looking at its slope.
 
 \section{Results}
 \subsection{When will the shortage end based on its historical data?}
@@ -512,7 +521,7 @@ trend in \textbf{all} processors, within the scope of this research.
 	\label{fig3}
 \end{figure}
 First, we will summarize the history of the shortage using the average prices
-shown in figure \ref{fig3}. We will start our analysis at Q4 2019 as that is
+shown in figure \ref{fig3}. We will start our analysis in Q4 2019 as that is
 when the shortage started to take effect \cite{Wikipedia:2023}. As we can see,
 CPU and GPU prices
 were on the decline prior to the pandemic, sitting at around \$450 and \$550
@@ -522,23 +531,19 @@ shift to remote working and learning in various countries coupled with the
 shutdown of many chip supply chains in favor of practicing social distancing.
 This was not the case for GPUs however, presumably because most remote jobs
 require CPUs more than GPUs, whose price continued to decline. CPU price
-remained stagnate while that of GPU keep decreasing until Q4 2020 when the
+remained stagnated while that of GPU keep decreasing until Q4 2020 when the
 China-United States trade war started which caused both prices to increase.
 In 2021, as CPU production picked up, its price significantly dropped.
 However, GPU prices kept growing due to the upsurge in demands from the
-cryptocurrencies mining craze. After which, in Q3 2021, GPU prices started
+cryptocurrency mining craze. After which, in Q3 2021, GPU prices started
 to drop while CPU prices oscillated around \$700. Today, the average CPU and
 GPU prices are around \$600.
 
 Comparing these prices with those from the pre-shortage era (2017 -- 2019), we
-can conclude that CPU prices have already recovered from the shortage since
+can deduce that CPU prices have already recovered from the shortage since
 about Q2 2021. On the other hand, although GPU prices have only stabilized
 since Q3 2022, they are still on the decline today. Thus, we can conclude that
-the processor shortage had already ended in Q3 2022. However, as our historical
-analysis on the shortage might suggest, the processor shortage was not caused
-by a single advent, but rather a series of events. If this series of events
-continues, it is likely that the shortage will reemerge. Ultimately, this
-result should be taken with a grain of salt.
+the processor shortage had already ended in Q3 2022.
 
 \subsubsection{Prediction using polynomial regression}
 \begin{figure}[htbp]
@@ -547,39 +552,155 @@ result should be taken with a grain of salt.
 	\label{fig4}
 \end{figure}
 The polynomial regression curves shown in figure \ref{fig4} are both of degree
-6 as that is the optimal degree suggested by NumPy to ensure that we won’t
+6 as that is the optimal degree suggested by NumPy to ensure that we won't
 overfit. The CPU curve, sporting an $R^{2}$ value of $0.49$, suggests that
 CPU prices will continue to drop, down to \$300 in 2024. On the other hand,
 the GPU curve, with an $R^{2}$ value of $0.74$, forecasts that GPU prices will
-skyrocket to unprecedented figures...
-
-Unfortunately, as the pricing history is rather chaotic with no real pattern,
-our regression models are unreliable at predicting even the nearest future
-regardless of their $R^{2}$ values. Thus, it is evidently better to rely
-on our educated guess instead.
-
-\subsubsection{Conclusion}
-All in all, we conclude that the shortage had already ended in Q3 2022.
-However, there is a slight chance that the shortage will reemerge should
-there be another global advent similar to in recent years.
+skyrocket to unprecedented figures.
 
 \subsection{What will be the next big thing in the development of
 	processors in terms of performance, efficiency, and value?}
 
-\subsubsection{Performance}
+For this question, we will apply both polynomial and linear regression on
+data points of average processors’ metrics over each quarter, represented by a
+scatter plot, to see the current trend in processors. All polynomial
+regressions are of the optimal degree of 7 as NumPy suggested and are
+represented by dotted lines. Linear regressions are represented by continuous
+lines.
 
+\subsubsection{Performance}
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\columnwidth]{avg_mark_reg.png}}
+	\caption{Average CPU mark and GPU G3D mark versus release date}
+	\label{fig5}
+\end{figure}
+
+As shown in figure \ref{fig5}, the average CPU mark and GPU G3D mark seem to
+have an upward trend with CPU marks being both higher and rising faster than
+those of GPU as suggested by the linear regressions. According to the
+polynomial regressions, however, the average mark for both will decrease in
+the upcoming year. The $R^{2}$ values for the polynomial regression of CPU
+and GPU are $0.72$ and $0.52$ respectively.
 
 \subsubsection{Efficiency}
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\columnwidth]{avg_tdp_reg.png}}
+	\caption{Average TDP (W) versus release date}
+	\label{fig6}
+\end{figure}
+
+In figure \ref{fig6}, the average TDP seems to be rising at the same rate
+for both CPU and GPU with the latter being about $50W$ higher than the former.
+Again, the polynomial regression suggests that the average TDP will fall in the
+middle of 2023. The $R^{2}$ values for the polynomial regression of CPU
+and GPU are $0.30$ and $0.38$ respectively.
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\columnwidth]{avg_power_reg.png}}
+	\caption{Average power performance versus release date}
+	\label{fig7}
+\end{figure}
+
+Figure \ref{fig7} also tells a similar story: The average power performance
+seems to rise for both with the CPU's rate of change being significantly higher.
+However, the polynomial regressions propose the opposite: CPU's power
+performance will decrease while that of GPU will increase dramatically in Q2
+2023. The $R^{2}$ values for the polynomial regression of CPU
+and GPU are $0.64$ and $0.54$ respectively.
 
 \subsubsection{Value}
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\columnwidth]{avg_release_price_reg.png}}
+	\caption{Average release price versus release date}
+	\label{fig8}
+\end{figure}
 
-% Todo Revise
+As demonstrated in figure \ref{fig8}, the average release price (already
+adjusted for inflation) will drop gradually according to the linear regression.
+On the other hand, the polynomial regressions suggest that CPU's release price
+will increase while GPU's decrease. The $R^{2}$ values for the polynomial
+regression of CPU and GPU are $0.37$ and $0.24$ respectively.
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\columnwidth]{avg_value_reg.png}}
+	\caption{Average value versus release date}
+	\label{fig9}
+\end{figure}
+
+As the release price drops and the mark increases, the average value should
+increase, all else being equal. This is indeed the case as demonstrated by
+the linear regressions in figure \ref{fig9}. The polynomial regressions
+contradictorily present that CPU values will decrease while GPU value’s rate
+of change is even higher than it seems. The $R^{2}$ values for the polynomial
+regression of CPU and GPU are $0.76$ and $0.48$ respectively.
 
 \section{Discussion}
-% Todo Write and Revise
+\subsection{When will the shortage end?}
+Our findings show that we can make an educated guess that the shortage had
+already ended in Q3 2022. However, applying polynomial regression gives us a
+different result, i.e., the price of CPU will continue to drop rather than
+stabilize while that of GPU will skyrocket.
+
+Unfortunately, as the pricing history is rather chaotic with no real pattern,
+our regression models are unreliable at predicting even the nearest future
+regardless of their $R^{2}$ values. Thus, it is evidently better to rely
+on our educated guess instead which concludes that the shortage ended in Q3
+2022.
+
+However, as our historical
+analysis of the shortage might suggest, the processor shortage was not caused
+by a single event, but rather a series of them. If this series of events
+continues, the chip shortage will likely reemerge. Ultimately,
+this result should be taken with a grain of salt.
+
+Thus, even if it is highly likely that the shortage has come to an end, chip
+manufacturers should still err on the side of caution. In some senses, the
+chip shortage was caused by the unreadiness of manufacturers in adapting to
+global crises. As such, measures should be taken now to ensure such a
+catastrophe will not happen in the future.
+
+\subsection{What is the next big trend in the development of chips?}
+Once again, as the patterns in the metrics are very random, polynomial
+regression did not yield any reasonably good results despite however high
+its $R^{2}$ score is. Therefore, we can only rely on our results from the linear
+regressions to draw a conclusion.
+
+Generally, despite the shortage, every metric of processors, CPU and GPU alike,
+evolved in a positive way from before the shortage. We found no evidence that
+supports the fact that the shortage had changed the processor industry in any
+way or form.
+
+This could imply that the chip manufacturers did not combat the shortage by
+adapting the chips to the consumer’s needs but rather by some other methods.
+
+\subsection{Limitations}
+One of the biggest limitations of this study is simply the lack of datasets of
+processors that are up to date, let alone ones with pricing history. Due to
+the lack of data, we were not able to analyze the data categorically which
+could be the reason why the patterns in the data seemed so random.
+
+Another limitation is that polynomial regression did not seem to be very
+effective at predicting the everchanging price in the processor market or
+even the metrics of processors in the short term.
+
+\subsection{Future research}
+Future research on this topic should try to acquire a broader dataset before
+going any further. Moreover, a better regression model should be used for
+prediction as a polynomial model does not seem to be a good match for this
+type of problem.
 
 \section{Conclusion}
-% Todo Write and Revise
+Our research found that even though it is highly likely that the shortage has
+come to an end, chip manufacturers should still be cautious in order to avoid
+such a catastrophe in the future.
+
+What is more, despite the shortage, every single metric of processors evolved
+in a positive way from before the shortage.
+This could imply that the chip manufacturers did not combat the shortage by
+adapting the chips to the consumer’s needs but rather by some other methods.
+
+Future research on this topic should try to acquire a broader dataset.
+Furthermore, a better regression model should be used for prediction.
 
 \section{Acknowledgments}
 I would like to express my greatest gratitude to my supervisor,
